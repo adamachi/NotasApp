@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NotasApp.Views.DetalleNotaPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:NotasApp.ViewModels"
+             x:DataType="viewModels:DetalleNotaViewModel"
+             Title="Nota"
+              BackgroundColor="{AppThemeBinding Light={StaticResource PageBackgroundLight}, Dark={StaticResource PageBackgroundDark}}">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,28" Spacing="18">
+            <Label Text="Escribe una nota" FontSize="30" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" />
+            <Label Text="Guarda tus ideas para volver a ellas cuando quieras." TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" />
+
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Título" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" />
+                        <Label Grid.Column="1" Text="{Binding CaracteresTitulo, StringFormat='{}{0}/100'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" />
+                    </Grid>
+                    <Entry Text="{Binding Titulo}" Placeholder="Título de la nota" MaxLength="100" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" />
+                    <Label Text="{Binding MensajeValidacion}" TextColor="#B91C1C" FontSize="12" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Contenido" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" />
+                    <Editor Text="{Binding Contenido}" Placeholder="Escribe aquí el contenido..." AutoSize="TextChanges" MinimumHeightRequest="220" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                <Button Text="Cancelar" Command="{Binding CancelarCommand}" BackgroundColor="#E2E8F0" TextColor="#334155" CornerRadius="12" HeightRequest="52" />
+                <Button Grid.Column="1" Text="Guardar" Command="{Binding GuardarCommand}" BackgroundColor="#4F46E5" TextColor="White" CornerRadius="12" HeightRequest="52" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

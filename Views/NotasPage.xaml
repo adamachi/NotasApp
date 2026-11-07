@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NotasApp.Views.NotasPage"
+             x:Name="NotasPageRoot"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:NotasApp.Models"
+             xmlns:viewModels="clr-namespace:NotasApp.ViewModels"
+             x:DataType="viewModels:NotasViewModel"
+             Title="Mis notas"
+             BackgroundColor="{AppThemeBinding Light={StaticResource PageBackgroundLight}, Dark={StaticResource PageBackgroundDark}}">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20,16,20,20" RowSpacing="16">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Mis notas" FontSize="30" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" />
+                <Label Text="Ideas, tareas y recuerdos en un solo lugar" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" />
+            </VerticalStackLayout>
+            <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                <Label Text="☼" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" VerticalOptions="Center" />
+                <Switch x:Name="ThemeSwitch" Toggled="OnThemeSwitchToggled" VerticalOptions="Center" />
+                <Label Text="☾" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <SearchBar Grid.Row="1" Placeholder="Buscar por título..." Text="{Binding TextoBusqueda}"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}" CancelButtonColor="#4F46E5" />
+
+        <Grid Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Notas}" SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                        <Image Source="pen.svg" WidthRequest="72" HeightRequest="72" HorizontalOptions="Center" />
+                        <Label Text="Aún no hay notas" FontSize="20" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" HorizontalTextAlignment="Center" />
+                        <Label Text="Crea tu primera nota con el botón +" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Nota">
+                        <Border Margin="0,0,0,12" Padding="16" BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <Border.Shadow>
+                                <Shadow Brush="#1E293B" Opacity="0.08" Radius="8" Offset="0,3" />
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="7">
+                                <Label Text="{Binding Titulo}" FontSize="19" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource HeadingLight}, Dark={StaticResource HeadingDark}}" LineBreakMode="TailTruncation" />
+                                <Button Grid.Column="1" Text="Eliminar" FontSize="12" TextColor="#B91C1C" BackgroundColor="#FEF2F2" CornerRadius="8" Padding="10,5"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarNotaCommand}" CommandParameter="{Binding .}" />
+                                <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Contenido}" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" MaxLines="3" LineBreakMode="TailTruncation" />
+                                <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FechaCreacion, StringFormat='{}{0:dd MMM yyyy, HH:mm}'}" FontSize="12" TextColor="#0F766E" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditarNotaCommand}" CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="+" FontSize="30" FontAttributes="Bold" TextColor="White" BackgroundColor="#4F46E5"
+                    CornerRadius="30" WidthRequest="60" HeightRequest="60" Padding="0"
+                    HorizontalOptions="End" VerticalOptions="End" Margin="0,0,4,4"
+                    Command="{Binding CrearNotaCommand}" SemanticProperties.Description="Crear una nota" />
+        </Grid>
+    </Grid>
+</ContentPage>
