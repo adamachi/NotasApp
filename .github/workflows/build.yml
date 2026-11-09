@@ -25,18 +25,19 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore NotasApp.csproj
 
-      - name: Build Android APK
+      - name: Build standalone Android APK
         run: >
           dotnet publish NotasApp.csproj
           -c Debug
           -f net10.0-android
           --no-restore
           -p:AndroidPackageFormat=apk
+          -p:EmbedAssembliesIntoApk=true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: NotasApp-Android-APK
+          name: NotasApp-Android-Fixed
           path: "**/bin/Debug/net10.0-android/**/*.apk"
           if-no-files-found: error
           retention-days: 14
