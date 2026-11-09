@@ -1,8 +1,10 @@
-name: Build MAUI Android APK
+
+name: Build NotasApp Android APK
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [master, main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,26 +14,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
-      - name: Install MAUI Workloads
-        run: dotnet workload install maui-android --source https://api.nuget.org/v3/index.json
+      - name: Install MAUI Android workload
+        run: dotnet workload install maui-android
 
-      - name: Clean Project
-        run: dotnet clean NotasApp.sln
-
-      - name: Restore Dependencies
-        run: dotnet restore NotasApp.sln --force
+      - name: Restore dependencies
+        run: dotnet restore NotasApp.csproj
 
       - name: Build Android APK
-        run: dotnet publish NotasApp.csproj -c Release -f net8.0-android --no-restore /p:AndroidPackageFormat=apk
+        run: >
+          dotnet publish NotasApp.csproj
+          -c Debug
+          -f net10.0-android
+          --no-restore
+          -p:AndroidPackageFormat=apk
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: NotasApp-APK
-          path: |
-            **/bin/Release/net8.0-android/*.apk
+          name: NotasApp-Android-APK
+          path: "**/bin/Debug/net10.0-android/**/*.apk"
+          if-no-files-found: error
+          retention-days: 14
